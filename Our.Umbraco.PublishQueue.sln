@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PublishQueue.Web", "Publish
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Our.Umbraco.PublishQueue", "Our.Umbraco.PublishQueue\Our.Umbraco.PublishQueue.csproj", "{A85339A0-0FC5-4FC8-B303-D7C7078E1D1F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{12CC7570-18A7-4AFE-B487-3B5C9A436EE7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

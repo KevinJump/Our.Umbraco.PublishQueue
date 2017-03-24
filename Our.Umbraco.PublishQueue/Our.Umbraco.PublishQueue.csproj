@@ -223,6 +223,8 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="App_Plugins\PublishQueue\package.manifest" />
+    <None Include="Config\dashboard.config.install.xdt" />
+    <None Include="Config\dashboard.config.uninstall.xdt" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
