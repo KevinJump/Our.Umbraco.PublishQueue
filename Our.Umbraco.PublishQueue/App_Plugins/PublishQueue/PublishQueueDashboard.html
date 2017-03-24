@@ -1,0 +1,67 @@
+﻿<div id="publishQueueDashboard" class="publish-queue-dashboard"
+     ng-controller="publishQueueDashboardController">
+    <div class="row">
+        <div class="span12">
+            <h2>Publication queue</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span6">
+            Items queued in the background publication queue
+        </div>
+        <div class="span6">
+            <div class="pull-right">
+                <button ng-click="processQueue()" class="btn btn-info" ng-disabled="status.Processing">Process Queue</button>
+                <button ng-click="updateQueue()" class="btn btn-success">Update</button>
+                <button ng-click="clearQueue()" class="btn btn-danger" ng-disabled="status.Processing">Clear</button>
+            </div>
+        </div>
+    </div>
+
+    <div ng-hide="loading">
+        <div class="queue-status-bar">
+            <div class="row">
+                <div class="span4">
+                    <strong>Queue Size</strong> {{status.Count}}
+                </div>
+                <div class="span4">
+                    <strong>Stauts</strong>
+                    <div class="queue-status" ng-show="status.Processing">Processing</div>
+                    <div class="queue-status" ng-hide="status.Processing">Idle</div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="span12">
+                <div class="progress">
+                    <div class="progress-bar"
+                         role="progressbar" aria-valuenow="{{status.Count}}" aria-valuemin="0" aria-valuemax="{{maxCount}}" style="width: {{progressValue()}}%;background-color: lightblue !important;height:100%">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="status.Count > 0">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Submitted</th>
+                        <th>Attempts</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in queue">
+                        <td>{{item.Id}}</td>
+                        <td>{{item.Name}}</td>
+                        <td>{{item.Submitted | date: 'dd-MMM-yyyy HH:mm:ss'}}</td>
+                        <th>{{item.Attempt-1}}</th>
+                        <th>{{actionNames[item.Action]}}</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

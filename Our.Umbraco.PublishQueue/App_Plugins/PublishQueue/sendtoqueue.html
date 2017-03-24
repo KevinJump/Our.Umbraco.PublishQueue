@@ -1,0 +1,53 @@
+﻿<div id="publishQueueDialog" class="publish-queue-dialog"
+     ng-controller="publishQueueDialogController">
+    <div class="umb-dialog-body from-horizontal">
+        <div class="umb-pane">
+            <div ng-show="loading">
+                <div class="propertyDiv">
+                    <h5>
+                        Send this page and all it's sub pages to the publication queue. 
+                    </h5>
+                    <p>
+                        Pages will be sent to the queue and will be published in the background, It may take 
+                        several minutes before the content is visible on the site. 
+                    </p>
+                        You can publish this page and all its subpages by checking <em>Include unpublished subpages</em> below.
+                    </p>
+                    <hr />
+
+                    <div>
+                        <input type="checkbox" id="publishAllCheckBox" ng-model="publishAll">
+                        <label for="publishAllCheckBox">
+                            Publish this page and all its subpages
+                        </label>
+                    </div>
+
+                    <div id="includeUnpublished" class="publish-queue-dialog-unpublished">
+                        <input type="checkbox" id="includeUnpublishedCheckBox"
+                               ng-model="includeUnpublished"
+                               ng-disabled="!publishAll">
+                        <label for="includeUnpublishedCheckBox" data-bind="css: { disabled: !publishAll }" class="disabled">
+                            Include unpublished subpages
+                        </label>
+                    </div>
+                </div>
+                <div ng-show="processing" class="publish-queue-update-box">
+                    Items Added : {{update.Count}} of {{update.Total}}
+                </div>
+            </div>
+            <div ng-show="processed">
+                <h5>Added to the queue</h5>
+                {{update.Count}} pages where added and there are now {{status.Count}} pages in the queue.
+            </div>
+        </div>
+    </div>
+    <div class="umb-dialog-footer btn-toolbar umb-btn-toolbar">
+        <a class="btn btn-danger" ng-click="nav.hideDialog()">
+            <localize key="general_close">Close</localize>
+        </a>
+        <button ng-disabled="processing" ng-hide="processed"
+                ng-click="send()" class="btn btn-primary">
+            Send to Queue
+        </button>
+    </div>
+</div>

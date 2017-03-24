@@ -1,0 +1,23 @@
+﻿.queue-status {
+    display: inline;
+}
+
+.queue-status-bar {
+    background-color: #eee;
+    padding: 0.5em 1em 0;
+    border-radius: 3px;
+    margin: 0.5em 0;
+}
+
+
+.publish-queue-update-box {
+    margin: 1em;
+    padding: 1em;
+    background-color: #eee;
+}
+
+.publish-queue-dialog-unpublished {
+    margin-left: 16px;
+    margin-bottom: 20px;
+    margin-top: 5px;
+}
