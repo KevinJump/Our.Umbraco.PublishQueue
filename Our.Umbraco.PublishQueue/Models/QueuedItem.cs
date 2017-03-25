@@ -36,6 +36,13 @@ namespace Our.Umbraco.PublishQueue.Models
 
         [Column("action")]
         public int Action { get; set; }
+
+        // 0.0.2 priority and schedule 
+        [Column("priority")]
+        public int Priority { get; set; }
+
+        [Column("Schedule")]
+        public DateTime Schedule { get; set; }
     }
 
     public enum QueueActions
