@@ -45,18 +45,22 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Id</th>
+                        <th>Priority</th>
                         <th>Name</th>
-                        <th>Submitted</th>
+                        <!--<th>Submitted</th>-->
+                        <th>Scheduled</th>
                         <th>Attempts</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="item in queue">
-                        <td>{{item.Id}}</td>
+                        <td>{{priorities[item.Priority]}}</td>
                         <td>{{item.Name}}</td>
+                        <!--
                         <td>{{item.Submitted | date: 'dd-MMM-yyyy HH:mm:ss'}}</td>
+                        -->
+                        <td>{{item.Schedule | date: 'dd-MMM-yyyy HH:mm:ss'}}</td>
                         <th>{{item.Attempt-1}}</th>
                         <th>{{actionNames[item.Action]}}</th>
                     </tr>

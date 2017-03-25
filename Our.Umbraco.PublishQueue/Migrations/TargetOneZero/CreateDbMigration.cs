@@ -10,7 +10,7 @@ using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.Migrations;
 using Umbraco.Core.Persistence.SqlSyntax;
 
-namespace Our.Umbraco.PublishQueue.Migrations.TaregetZeroOne
+namespace Our.Umbraco.PublishQueue.Migrations.TargetOneZero
 {
     [Migration("0.0.1", 1, "Our.Umbraco.PublishQueue")]
     public class CreateDbMigration : MigrationBase

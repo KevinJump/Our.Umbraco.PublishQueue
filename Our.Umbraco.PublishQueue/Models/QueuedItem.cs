@@ -41,7 +41,7 @@ namespace Our.Umbraco.PublishQueue.Models
         [Column("priority")]
         public int Priority { get; set; }
 
-        [Column("Schedule")]
+        [Column("schedule")]
         public DateTime Schedule { get; set; }
     }
 

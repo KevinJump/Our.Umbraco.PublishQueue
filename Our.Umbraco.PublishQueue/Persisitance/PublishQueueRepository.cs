@@ -35,7 +35,8 @@ namespace Our.Umbraco.PublishQueue.Persisitance
             {
                 using (var db = _dbContext.Database)
                 {
-                    var item = db.FirstOrDefault<QueuedItem>("SELECT * FROM PublishQueue ORDER BY Submitted");
+                    var item = db.FirstOrDefault<QueuedItem>("SELECT * FROM PublishQueue WHERE schedule < @0 ORDER BY PRIORITY DESC, SUBMITTED, schedule;", DateTime.Now);
+                    // var item = db.FirstOrDefault<QueuedItem>("SELECT * FROM PublishQueue ORDER BY Submitted");
                     if (item != null)
                     {
                         db.Delete<QueuedItem>(item.Id);
@@ -54,6 +55,9 @@ namespace Our.Umbraco.PublishQueue.Persisitance
                 {
                     if (insertIfExists || !Contains(item.NodeKey))
                     {
+                        if (item.Schedule == DateTime.MinValue)
+                            item.Schedule = DateTime.Now;
+
                         item.Attempt++;
                         db.Insert(item);
                     }
@@ -90,7 +94,8 @@ namespace Our.Umbraco.PublishQueue.Persisitance
         {
             using (var db = _dbContext.Database)
             {
-                return db.Fetch<QueuedItem>("SELECT * FROM PublishQueue ORDER BY Submitted");
+                return db.Fetch<QueuedItem>("SELECT * FROM PublishQueue ORDER BY PRIORITY DESC, SUBMITTED, schedule;");
+                // return db.Fetch<QueuedItem>("SELECT * FROM PublishQueue ORDER BY Submitted");
             }
 
         }

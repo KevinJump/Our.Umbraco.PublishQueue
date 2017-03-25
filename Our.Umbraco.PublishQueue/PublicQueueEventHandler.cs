@@ -16,7 +16,7 @@ namespace Our.Umbraco.PublishQueue
     {
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
-            ApplyMigrations(applicationContext, "Our.Umbraco.PublishQueue", new SemVersion(0, 0, 1));
+            ApplyMigrations(applicationContext, "Our.Umbraco.PublishQueue", new SemVersion(0, 0, 2));
 
             PublishQueueContext.EnsureContext(
                 applicationContext.DatabaseContext,

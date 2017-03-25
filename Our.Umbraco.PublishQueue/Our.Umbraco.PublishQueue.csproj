@@ -210,7 +210,8 @@
     <Compile Include="Controllers\PublishQueueApiController.cs" />
     <Compile Include="Controllers\PublishQueueScheduleController.cs" />
     <Compile Include="Hubs\PublishQueueHub.cs" />
-    <Compile Include="Migrations\TaregetZeroOne\CreateDbMigration.cs" />
+    <Compile Include="Migrations\TargetOneZero\CreateDbMigration.cs" />
+    <Compile Include="Migrations\TargetOneZero\PriorityAndScheduled.cs" />
     <Compile Include="Models\QueuedItem.cs" />
     <Compile Include="Models\QueueStatus.cs" />
     <Compile Include="Persisitance\IPublishQueueRepository.cs" />
