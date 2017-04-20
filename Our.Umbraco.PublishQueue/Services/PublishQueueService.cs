@@ -118,33 +118,45 @@ namespace Our.Umbraco.PublishQueue.Services
                         if (item != null)
                         {
                             bool success = false;
-                            var contentNode = _contentService.GetById(item.NodeKey);
-                            if (contentNode != null)
-                            {
-                                switch( (QueueActions)item.Action )
-                                {
-                                    case QueueActions.Publish:
-                                        success = PublishItem(contentNode, item);
-                                        break;
-                                    case QueueActions.Unpublish:
-                                        success = UnPublishItem(contentNode, item);
-                                        break;
-                                    case QueueActions.Save:
-                                        success = SaveItem(contentNode, item);
-                                        break;
-                                    case QueueActions.Delete:
-                                        success = DeleteItem(contentNode, item);
-                                        break;
-                                    default:
-                                        _logger.Info<PublishQueueService>("NoAction Processed", () => contentNode.Name);
-                                        success = true;
-                                        break;
-                                }
 
-                                if (!success && item.Attempt < 10)
+                            if (item.Action > (int)QueueActions.Reserved)
+                            {
+                                success = PublishQueue.FireCustomAction(
+                                    new PublishQueueEventArgs
+                                    {
+                                        Item = item
+                                    });
+                            }
+                            else
+                            {
+                                var contentNode = _contentService.GetById(item.NodeKey);
+                                if (contentNode != null)
                                 {
-                                    Enqueue(item);
+                                    switch ((QueueActions)item.Action)
+                                    {
+                                        case QueueActions.Publish:
+                                            success = PublishItem(contentNode, item);
+                                            break;
+                                        case QueueActions.Unpublish:
+                                            success = UnPublishItem(contentNode, item);
+                                            break;
+                                        case QueueActions.Save:
+                                            success = SaveItem(contentNode, item);
+                                            break;
+                                        case QueueActions.Delete:
+                                            success = DeleteItem(contentNode, item);
+                                            break;
+                                        default:
+                                            _logger.Info<PublishQueueService>("NoAction Processed", () => contentNode.Name);
+                                            success = true;
+                                            break;
+                                    }
+
                                 }
+                            }
+                            if (!success && item.Attempt < 10)
+                            {
+                                Enqueue(item);
                             }
                         }
 
