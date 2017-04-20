@@ -43,6 +43,11 @@ namespace Our.Umbraco.PublishQueue.Models
 
         [Column("schedule")]
         public DateTime Schedule { get; set; }
+
+        // 0.0.3 Custom data?
+        [Column("data")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string data { get; set; }
     }
 
     public enum QueueActions
@@ -51,7 +56,7 @@ namespace Our.Umbraco.PublishQueue.Models
         Publish = 1,
         Save,
         Unpublish,
-        Delete
-
+        Delete,
+        Reserved = 10
     }
 }

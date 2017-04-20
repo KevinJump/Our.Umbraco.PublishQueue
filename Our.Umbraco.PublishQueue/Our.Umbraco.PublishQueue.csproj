@@ -211,6 +211,7 @@
     <Compile Include="Controllers\PublishQueueScheduleController.cs" />
     <Compile Include="Hubs\PublishQueueHub.cs" />
     <Compile Include="Migrations\TargetOneZero\CreateDbMigration.cs" />
+    <Compile Include="Migrations\TargetOneZero\AddDataColumn.cs" />
     <Compile Include="Migrations\TargetOneZero\PriorityAndScheduled.cs" />
     <Compile Include="Models\QueuedItem.cs" />
     <Compile Include="Models\QueueStatus.cs" />

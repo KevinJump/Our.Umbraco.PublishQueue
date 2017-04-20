@@ -57,7 +57,7 @@ namespace Our.Umbraco.PublishQueue.Services
 
         }
 
-        public QueuedItem Enqueue(Guid key, string name, int userId = 0, QueueActions action = QueueActions.Publish)
+        public QueuedItem Enqueue(Guid key, string name, int userId = 0, int action = (int)QueueActions.Publish)
         {
             var item = new QueuedItem()
             {
@@ -65,7 +65,7 @@ namespace Our.Umbraco.PublishQueue.Services
                 NodeKey = key,
                 Submitted = DateTime.Now,
                 UserId = userId,
-                Action = (int)action
+                Action = action
             };
 
             return Enqueue(item);
