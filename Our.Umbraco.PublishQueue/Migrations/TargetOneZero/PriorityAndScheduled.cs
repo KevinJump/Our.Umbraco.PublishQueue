@@ -40,10 +40,18 @@ namespace Our.Umbraco.PublishQueue.Migrations.TargetOneZero
                 Create.Column("schedule").OnTable("PublishQueue").AsDateTime().WithDefault(SystemMethods.CurrentDateTime);
             }
 
-            // create an index on the node key - for speed?
-            Create.Index("IX_publishQueueNodeKey").OnTable("PublishQueue")
-                .OnColumn("nodeKey")
-                .Ascending();
+
+            var dbIndexes = SqlSyntax.GetDefinedIndexes(Context.Database)
+              .Select(x => x.Item2).ToArray();
+
+
+            if (dbIndexes.InvariantContains("IX_publishQueueNodeKey") == false)
+            {
+                // create an index on the node key - for speed?
+                Create.Index("IX_publishQueueNodeKey").OnTable("PublishQueue")
+                    .OnColumn("nodeKey")
+                    .Ascending();
+            }
         }
     }
 }

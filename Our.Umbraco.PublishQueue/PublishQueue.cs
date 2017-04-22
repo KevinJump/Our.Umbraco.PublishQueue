@@ -16,7 +16,7 @@ namespace Our.Umbraco.PublishQueue
             if (ProcessCustomAction != null)
                 ProcessCustomAction(e);
 
-            return e.Sucess;
+            return e.Success;
         }
     }
 
@@ -25,6 +25,6 @@ namespace Our.Umbraco.PublishQueue
     public class PublishQueueEventArgs
     {
         public QueuedItem Item { get; set; }
-        public bool Sucess { get; set; }
+        public bool Success { get; set; }
     }
 }
