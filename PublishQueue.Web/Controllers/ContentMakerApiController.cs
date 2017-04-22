@@ -5,6 +5,9 @@ using System.Web;
 using System.Web.Http;
 using Umbraco.Web.WebApi;
 
+using Our.Umbraco.PublishQueue;
+using Our.Umbraco.PublishQueue.Models;
+
 namespace PublishQueue.Web.Controllers
 {
     public class ContentMakerApiController : UmbracoAuthorizedApiController
@@ -29,6 +32,27 @@ namespace PublishQueue.Web.Controllers
 
                     Services.ContentService.Save(node);
                 }
+            }
+        }
+
+        [HttpGet]
+        public void GetCustomEvents()
+        {
+            for(int n =0;n<100;n++)
+            {
+                var queueItem = new QueuedItem()
+                {
+                    Action =  (int)QueueActions.Reserved + 100,
+                    data = $"Custom Action {n}",
+                    Name = $"My Custom Event Number {n}",
+                    UserId = 0,
+                    NodeKey = Guid.NewGuid(),
+                    Id = n,
+                    Submitted = DateTime.Now
+                };
+
+                PublishQueueContext.Current.QueueService.Enqueue(queueItem);
+
             }
         }
     }
