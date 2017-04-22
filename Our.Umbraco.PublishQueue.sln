@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{12CC7570-18A7-4AFE-B487-3B5C9A436EE7}"
 	ProjectSection(SolutionItems) = preProject
 		Build\Our.Umbraco.PublishQueue.nuspec = Build\Our.Umbraco.PublishQueue.nuspec
+		Build\releases.cmd = Build\releases.cmd
 	EndProjectSection
 EndProject
 Global
