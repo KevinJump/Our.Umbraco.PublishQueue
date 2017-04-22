@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
+using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.DatabaseModelDefinitions;
 using Umbraco.Core.Persistence.Migrations;
 using Umbraco.Core.Persistence.SqlSyntax;
@@ -15,6 +16,10 @@ namespace Our.Umbraco.PublishQueue.Migrations.TargetOneZero
     [Migration("0.0.2", 1, "Our.Umbraco.PublishQueue")]
     public class PriorityAndScheduled : MigrationBase
     {
+        private readonly UmbracoDatabase _db =
+            ApplicationContext.Current.DatabaseContext.Database;
+
+
         public PriorityAndScheduled(ISqlSyntaxProvider sqlSyntax, ILogger logger) 
             : base(sqlSyntax, logger)
         {
@@ -26,7 +31,7 @@ namespace Our.Umbraco.PublishQueue.Migrations.TargetOneZero
 
         public override void Up()
         {
-            var columns = SqlSyntax.GetColumnsInSchema(Context.Database).ToArray();
+            var columns = SqlSyntax.GetColumnsInSchema(_db).ToArray();
 
             if (columns.Any(x => x.TableName.InvariantEquals("PublishQueue")
                 && x.ColumnName.InvariantEquals("priority")) == false)
@@ -41,7 +46,7 @@ namespace Our.Umbraco.PublishQueue.Migrations.TargetOneZero
             }
 
 
-            var dbIndexes = SqlSyntax.GetDefinedIndexes(Context.Database)
+            var dbIndexes = SqlSyntax.GetDefinedIndexes(_db)
               .Select(x => x.Item2).ToArray();
 
 
