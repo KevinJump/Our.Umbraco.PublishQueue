@@ -20,6 +20,8 @@ namespace Our.Umbraco.PublishQueue.Controllers
         [HttpGet]
         public IEnumerable<QueuedItem> GetItems()
         {
+            // only return the top 100. because it gets messy with more than that. 
+            return PublishQueueContext.Current.QueueService.List(100);
         }
 
         [HttpGet]
