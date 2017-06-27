@@ -216,6 +216,7 @@
     <Compile Include="Migrations\TargetOneZero\AddDashboard.cs" />
     <Compile Include="Migrations\TargetOneZero\CreateDbMigration.cs" />
     <Compile Include="Migrations\TargetOneZero\AddDataColumn.cs" />
+    <Compile Include="Migrations\TargetOneZero\EnlargeDataColumn.cs" />
     <Compile Include="Migrations\TargetOneZero\PriorityAndScheduled.cs" />
     <Compile Include="Models\QueuedItem.cs" />
     <Compile Include="Models\QueueStatus.cs" />

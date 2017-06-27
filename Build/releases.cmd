@@ -1,6 +1,7 @@
 @ECHO OFF
 
 ECHO Nuget
+nuget pack Our.Umbraco.PublishQueue.core.nuspec
 nuget pack Our.Umbraco.PublishQueue.nuspec
 
 ECHO Copy to local git

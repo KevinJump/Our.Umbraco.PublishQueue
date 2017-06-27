@@ -36,7 +36,7 @@ namespace Our.Umbraco.PublishQueue.Migrations.TargetOneZero
             if (columns.Any(x => x.TableName.InvariantEquals("PublishQueue")
                 && x.ColumnName.InvariantEquals("data")) == false)
             {
-                Create.Column("data").OnTable("PublishQueue").AsString().Nullable();
+                Create.Column("data").OnTable("PublishQueue").AsString(2048).Nullable();
             }
 
         }

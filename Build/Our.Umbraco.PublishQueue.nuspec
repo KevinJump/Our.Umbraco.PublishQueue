@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
     <metadata>
         <id>Our.Umbraco.PublishQueue</id>
-        <version>0.0.3-Beta</version>
+        <version>0.0.7-Beta</version>
         <title>Umbraco Publication Queue</title>
         <authors>Kevin Jump,Darren Ferguson</authors>
         <owners>Kevin Jump</owners>
@@ -15,16 +15,17 @@
           0.0.1 - Intial release
           0.0.2 - Backwards Compatable SignalR install / Priority and scheduling on queue
           0.0.3 - custom data, and events
+          0.0.5 - seperated out core (so you can put it in assemblies)
+          0.0.6 - make the data column bigger
         </releaseNotes>
         <dependencies>
             <group targetFramework=".NETFramework4.5.2">
+                <dependency id="Our.Umbraco.PublishQueue.Core" version="0.0.7-beta" />
                 <dependency id="Microsoft.AspNet.SignalR.JS" version="2.2.1" />
-                <dependency id="Microsoft.AspNet.SignalR.Core" version="2.2.1" />
             </group>
         </dependencies>
     </metadata>
   <files>
     <file src="..\Our.Umbraco.PublishQueue\App_Plugins\PublishQueue\**\*.*" target="content\App_Plugins\PublishQueue" />
-    <file src="..\Our.Umbraco.PublishQueue\bin\Release\Our.Umbraco.PublishQueue.dll" target="lib\Our.Umbraco.PublishQueue.dll" />
   </files>
 </package>

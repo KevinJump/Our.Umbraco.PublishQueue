@@ -121,6 +121,7 @@ namespace Our.Umbraco.PublishQueue.Services
 
                             if (item.Action > (int)QueueActions.Reserved)
                             {
+                                _logger.Info<PublishQueueService>("Firing Custom Action Event: {0}", ()=> item.Action);
                                 success = PublishQueue.FireCustomAction(
                                     new PublishQueueEventArgs
                                     {
