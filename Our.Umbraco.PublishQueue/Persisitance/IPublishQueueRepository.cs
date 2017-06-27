@@ -10,5 +10,6 @@ namespace Our.Umbraco.PublishQueue.Persisitance
         QueuedItem Dequeue();
         QueuedItem Enqueue(QueuedItem item, bool insertIfExists);
         IEnumerable<QueuedItem> List();
+        IEnumerable<QueuedItem> List(int limit);
     }
 }

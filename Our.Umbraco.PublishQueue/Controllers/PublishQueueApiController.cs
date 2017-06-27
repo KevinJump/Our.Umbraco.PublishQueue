@@ -20,7 +20,6 @@ namespace Our.Umbraco.PublishQueue.Controllers
         [HttpGet]
         public IEnumerable<QueuedItem> GetItems()
         {
-            return PublishQueueContext.Current.QueueService.List();
         }
 
         [HttpGet]

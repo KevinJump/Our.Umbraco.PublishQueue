@@ -99,5 +99,15 @@ namespace Our.Umbraco.PublishQueue.Persisitance
             }
 
         }
+
+        public IEnumerable<QueuedItem> List(int limit)
+        {
+            using (var db = _dbContext.Database)
+            {
+                return db.Fetch<QueuedItem>("SELECT TOP(@0) * FROM PublishQueue ORDER BY PRIORITY DESC, SUBMITTED, schedule;", limit);
+                // return db.Fetch<QueuedItem>("SELECT * FROM PublishQueue ORDER BY Submitted");
+            }
+
+        }
     }
 }

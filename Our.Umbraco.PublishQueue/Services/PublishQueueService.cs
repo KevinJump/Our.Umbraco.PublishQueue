@@ -76,6 +76,11 @@ namespace Our.Umbraco.PublishQueue.Services
             return _queueRepo.List();
         }
 
+        public IEnumerable<QueuedItem> List(int limit)
+        {
+            return _queueRepo.List(limit);
+        }
+
         public void Clear()
         {
             _queueRepo.Clear();
