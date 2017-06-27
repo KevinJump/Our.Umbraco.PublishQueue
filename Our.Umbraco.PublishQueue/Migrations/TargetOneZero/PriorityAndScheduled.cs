@@ -53,9 +53,11 @@ namespace Our.Umbraco.PublishQueue.Migrations.TargetOneZero
             if (dbIndexes.InvariantContains("IX_publishQueueNodeKey") == false)
             {
                 // create an index on the node key - for speed?
-                Create.Index("IX_publishQueueNodeKey").OnTable("PublishQueue")
+                Create.Index("IX_publishQueueNodeKey")
+                    .OnTable("PublishQueue")
                     .OnColumn("nodeKey")
-                    .Ascending();
+                    .Unique();
+                    // .Ascending();
             }
         }
     }
