@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+    <metadata>
+        <id>Our.Umbraco.PublishQueue</id>
+        <version>0.0.3-Beta</version>
+        <title>Umbraco Publication Queue</title>
+        <authors>Kevin Jump,Darren Ferguson</authors>
+        <owners>Kevin Jump</owners>
+        <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
+        <projectUrl>https://github.com/KevinJump/Our.Umbraco.PublishQueue/</projectUrl>
+        <iconUrl>http://jumoo.co.uk/img/queueicon.png</iconUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Simple publication queue for Umbraco (7.5+)</description>
+        <releaseNotes>
+          0.0.1 - Intial release
+          0.0.2 - Backwards Compatable SignalR install / Priority and scheduling on queue
+          0.0.3 - custom data, and events
+        </releaseNotes>
+        <dependencies>
+            <group targetFramework=".NETFramework4.5.2">
+                <dependency id="Microsoft.AspNet.SignalR.JS" version="2.2.1" />
+                <dependency id="UmbracoCms" version="7.6.0-beta" />
+                <dependency id="Microsoft.AspNet.SignalR.Core" version="2.2.1" />
+            </group>
+        </dependencies>
+    </metadata>
+  <files>
+    <file src=".\App_Plugins\PublishQueue\**\*.*" target="content\App_Plugins\PublishQueue" />
+    <file src=".\bin\Release\Our.Umbraco.PublishQueue.dll" target="lib\Our.Umbraco.PublishQueue.dll" />
+  </files>
+</package>

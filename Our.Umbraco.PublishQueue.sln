@@ -1,13 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.9
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PublishQueue.Web", "PublishQueue.Web\PublishQueue.Web.csproj", "{99634CEC-96D5-47A5-92B2-AA139F0FA0B0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Our.Umbraco.PublishQueue", "Our.Umbraco.PublishQueue\Our.Umbraco.PublishQueue.csproj", "{A85339A0-0FC5-4FC8-B303-D7C7078E1D1F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{12CC7570-18A7-4AFE-B487-3B5C9A436EE7}"
+	ProjectSection(SolutionItems) = preProject
+		Build\Our.Umbraco.PublishQueue.nuspec = Build\Our.Umbraco.PublishQueue.nuspec
+		Build\releases.cmd = Build\releases.cmd
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

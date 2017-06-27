@@ -55,6 +55,7 @@
 
 
         $scope.actionNames = ['None', 'Publish', 'Save', 'Unpublish', 'Delete'];
+        $scope.priorities = ["Low", "Normal", "High", "Super High"];
 
         $scope.updateCount = 0; 
 

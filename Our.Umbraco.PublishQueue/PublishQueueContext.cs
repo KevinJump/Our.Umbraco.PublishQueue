@@ -43,8 +43,12 @@ namespace Our.Umbraco.PublishQueue
         {
             QueueService = new PublishQueueService(dbContext, contentService, logger);
 
-            ScheduleDisabled = string.IsNullOrEmpty(ConfigurationManager.AppSettings["publishQueue.disableScheduledQueue"]) ?
-                false : ConfigurationManager.AppSettings["publishQueue.disableScheduledQueue"].TryConvertTo<bool>();
+            bool temp;
+
+            if (bool.TryParse(ConfigurationManager.AppSettings["publishQueue.disableScheduledQueue"], out temp))
+            {
+                ScheduleDisabled = temp;
+            }
 
         }
     }

@@ -53,6 +53,11 @@ namespace Our.Umbraco.PublishQueue
         /// </summary>
         private static void QueueItem(Guid nodeKey, string name, int userId, QueueActions action)
         {
+            PublishQueueContext.Current.QueueService.Enqueue(nodeKey, name, userId, (int)action);
+        }
+
+        private static void QueueItem(Guid nodeKey, string name, int userId, int action)
+        {
             PublishQueueContext.Current.QueueService.Enqueue(nodeKey, name, userId, action);
         }
     }

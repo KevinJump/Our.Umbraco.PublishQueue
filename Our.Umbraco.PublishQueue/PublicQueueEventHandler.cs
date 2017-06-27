@@ -1,12 +1,16 @@
-﻿using Semver;
+﻿using Microsoft.AspNet.SignalR;
+using Owin;
+using Semver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Umbraco.Core;
+using Umbraco.Core.Configuration;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Persistence.Migrations;
+using Umbraco.Web;
 using Umbraco.Web.Models.Trees;
 using Umbraco.Web.Trees;
 
@@ -14,9 +18,24 @@ namespace Our.Umbraco.PublishQueue
 {
     public class PublicQueueEventHandler : ApplicationEventHandler
     {
+        protected override void ApplicationStarting(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
+        {
+            UmbracoDefaultOwinStartup.MiddlewareConfigured += UmbracoDefaultOwinStartup_MiddlewareConfigured;
+        }
+
+        private void UmbracoDefaultOwinStartup_MiddlewareConfigured(object sender, OwinMiddlewareConfiguredEventArgs e)
+        {
+            if (UmbracoVersion.Current.Major <= 7 && UmbracoVersion.Current.Minor < 6)
+            {
+                LogHelper.Info<PublicQueueEventHandler>("Pre: 7.6 - Mapping Signal R");
+                e.AppBuilder.MapSignalR("/umbraco/backoffice/signalr", new HubConfiguration { EnableDetailedErrors = true });
+            }
+        }
+
+
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
-            ApplyMigrations(applicationContext, "Our.Umbraco.PublishQueue", new SemVersion(0, 0, 1));
+            ApplyMigrations(applicationContext, "Our.Umbraco.PublishQueue", new SemVersion(0, 0, 3));
 
             PublishQueueContext.EnsureContext(
                 applicationContext.DatabaseContext,
