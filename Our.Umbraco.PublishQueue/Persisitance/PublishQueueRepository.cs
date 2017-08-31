@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
+using Umbraco.Core.Persistence;
 
 namespace Our.Umbraco.PublishQueue.Persisitance
 {
@@ -109,5 +110,26 @@ namespace Our.Umbraco.PublishQueue.Persisitance
             }
 
         }
+
+        public QueuePagedResult GetPaged(int page, int itemsPerPage)
+        {
+            var sql = new Sql().Select("*")
+                .From<QueuedItem>(_dbContext.SqlSyntax);
+
+            sql.OrderBy("PRIORITY DESC, SUBMITTED, schedule");
+
+            var result = _dbContext.Database.Page<QueuedItem>(page, itemsPerPage, sql);
+
+            return new QueuePagedResult
+            {
+                CurrentPage = result.CurrentPage,
+                ItemsPerPage = result.ItemsPerPage,
+                TotalItems = result.TotalItems,
+                Items = result.Items,
+                TotalPages = result.TotalPages
+            };
+        }
     }
+
+
 }

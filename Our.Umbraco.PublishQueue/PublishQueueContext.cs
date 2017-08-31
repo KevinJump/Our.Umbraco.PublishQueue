@@ -27,6 +27,7 @@ namespace Our.Umbraco.PublishQueue
 
         // flag to say if the scheduled job is disabled. 
         public bool ScheduleDisabled { get; internal set; }
+        public int SchedulePeriod { get; internal set; }
 
         public PublishQueueService QueueService { get; internal set; }
 
@@ -43,8 +44,34 @@ namespace Our.Umbraco.PublishQueue
         {
             QueueService = new PublishQueueService(dbContext, contentService, logger);
 
-            ScheduleDisabled = string.IsNullOrEmpty(ConfigurationManager.AppSettings["publishQueue.disableScheduledQueue"]) ?
-                false : ConfigurationManager.AppSettings["publishQueue.disableScheduledQueue"].TryConvertTo<bool>();
+
+            // get the disabled schedule job setting, which is false by default
+            var disabledString = string.IsNullOrEmpty(ConfigurationManager.AppSettings["publishQueue.disableScheduledQueue"]) ?
+                "false" : ConfigurationManager.AppSettings["publishQueue.disableScheduledQueue"];
+
+            if (!bool.TryParse(disabledString, out bool disabled))
+            {
+                ScheduleDisabled = false;
+            }
+            else
+            {
+                ScheduleDisabled = disabled;
+            }
+            
+
+            // get the scheduled period, which defaults to 120 seconds - if the value
+            // is missing or currupt.
+            var periodString = string.IsNullOrEmpty(ConfigurationManager.AppSettings["publishQueue.checkPeriod"]) ?
+                "120" : ConfigurationManager.AppSettings["publishQueue.checkPeriod"];
+
+            if (!int.TryParse(periodString, out int period))
+            {
+                SchedulePeriod = 120;
+            }
+            else
+            {
+                SchedulePeriod = period;
+            }
 
         }
     }

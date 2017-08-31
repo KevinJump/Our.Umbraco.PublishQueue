@@ -1,83 +1,136 @@
-﻿angular.module('umbraco').controller('publishQueueDashboardController',
-    function ($scope, $http, $timeout, publishQueueDashboardService, publishQueueHub) {
+﻿(function () {
 
-        $scope.loading = true; 
-        $scope.status = { Count: 0 };
-        $scope.maxCount = 0;
+    'use strict';
 
-        $scope.getQueue = function (loading) {
-            $scope.loading = loading;
-            publishQueueDashboardService.getItems()
-                .then(function (response) {
-                    $scope.queue = response.data;
-                    $scope.loading = false;
-                    $scope.getStatus();
-                });
+    function dashboardController($scope, publishQueueService, publishQueueHub) {
+
+        var vm = this;
+
+        vm.loaded = false;
+        vm.status = {
+            Count: 0
         };
+        vm.maxCount = 0;
 
-        $scope.getStatus = function () {
-            publishQueueDashboardService.getStatus()
-                .then(function (response) {
-                    $scope.status = response.data;
-                    $scope.updateCount = $scope.status.Count;
+        vm.loadQueue = loadQueue;
+        vm.getQueueItems = getQueueItems;
+        vm.getStatus = getStatus;
 
-                    if ($scope.maxCount < $scope.status.Count) {
-                        $scope.maxCount = $scope.status.Count;
-                    }
+        vm.processQueue = processQueue;
+        vm.clearQueue = clearQueue;
+        vm.updateQueue = updateQueue;
+
+        vm.percentQueue = percentQueue;
+
+        vm.nextPage = nextPage;
+        vm.prevPage = prevPage;
+        vm.goToPage = goToPage;
+
+        vm.showPos = showPos;
+
+        vm.page = 1;
+
+        vm.actions = ['None', 'Publish', 'Save', 'Unpublish', 'Delete'];
+        vm.priorities = ["Low", "Normal", "High", "Super High"];
+
+
+        //////////////////
+
+        function loadQueue() {
+            vm.loaded = false;
+            getQueueItems(vm.page);
+        }
+
+        function getQueueItems(page) {
+            publishQueueService.getItems(page)
+                .then(function (result) {
+                    vm.queue = result.data;
+                    vm.loaded = true;
+                    vm.getStatus();
+                }, function (error) {
+
                 });
-        };
+        }
 
-
-        $scope.processQueue = function () {
-            publishQueueDashboardService.process()
-                .then(function (response) {
-                    $scope.getQueue(true);
+        function getStatus() {
+            publishQueueService.getStatus()
+                .then(function (result) {
+                    vm.status = result.data;
+                    vm.updateCount = vm.status.Count;
+                    vm.maxCount = Math.max(vm.maxCount, vm.status.Count);
                 });
-            $scope.getStatus();
-        };
+        }
 
-        $scope.clearQueue = function () {
-            if (confirm("are you sure you want to clear the queue - all actions will be lost")) {
+        function processQueue() {
+            publishQueueService.process()
+                .then(function (result) {
+                    vm.getQueueItems(vm.page);
+                })
+        }
 
-                publishQueueDashboardService.clear()
-                    .then(function (response) {
-                        alert("cleared " + response.data + " items from queue");
-                    });
+        function clearQueue() {
+            if (!confirm("are you sure you want to clear the queue?")) {
+                return;
             }
-        };
 
-        $scope.progressValue = function () {
-            if ($scope.maxCount > 0) {
-                return ($scope.status.Count / $scope.maxCount) * 100;
+            publishQueueService.clear()
+                .then(function (respose) {
+                    // cleared
+                });
+        }
+
+        function updateQueue() {
+            vm.loadQueue();
+        }
+
+        function percentQueue() {
+            if (vm.maxCount > 0) {
+                return (vm.status.Count / vm.maxCount) * 100;
             }
+
             return 0;
         }
 
-
-        $scope.actionNames = ['None', 'Publish', 'Save', 'Unpublish', 'Delete'];
-        $scope.priorities = ["Low", "Normal", "High", "Super High"];
-
-        $scope.updateCount = 0; 
-
-        // buttons 
-        //
-        $scope.updateQueue = function () {
-            $scope.getQueue(true);
+        function showPos(index) {
+            return ((vm.queue.CurrentPage - 1) * vm.queue.ItemsPerPage) + (index + 1)
         }
 
-        // signal R 
-        var queueHub = publishQueueHub.Connect('PublishQueueHub');
-
-        queueHub.on('progress', function (data) {
-            $scope.status = data;
-            if (Math.abs($scope.updateCount - $scope.status.Count) > 10)
-            {
-                $scope.getQueue(false);
+        ///// signal r
+        vm.queueHub = publishQueueHub.Connect('PublishQueueHub');
+        vm.queueHub.on('progress', function (data) {
+            vm.status = data;
+            // more than 100, and we have a page, anyway.?
+            if (Math.abs(vm.updateCount - vm.status.Count) > 10) {
+                vm.getQueueItems(vm.page);
             }
-        });
+        })
 
-        queueHub.start();
+        vm.queueHub.start();
+        vm.loadQueue();
 
-        $scope.getQueue(true);
+        /////////////
+
+        function nextPage () {
+           vm.page++;
+           refreshView();
+        }
+
+        function prevPage () {
+           vm.page--;
+           refreshView();
+        }
+
+        function goToPage (pageNo) {
+           vm.page = pageNo;
+            refreshView();
+        }
+
+        function refreshView() {
+            vm.getQueueItems(vm.page);
+        }
     }
-);
+
+    angular.module('umbraco')
+        .controller('publishQueueDashboardController', dashboardController);
+
+})();

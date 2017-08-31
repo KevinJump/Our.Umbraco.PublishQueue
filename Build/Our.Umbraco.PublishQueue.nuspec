@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
     <metadata>
         <id>Our.Umbraco.PublishQueue</id>
-        <version>0.0.9-Beta</version>
+        <version>1.0.0.760</version>
         <title>Umbraco Publication Queue</title>
         <authors>Kevin Jump,Darren Ferguson</authors>
         <owners>Kevin Jump</owners>
@@ -18,10 +18,11 @@
           0.0.5 - seperated out core (so you can put it in assemblies)
           0.0.6 - make the data column bigger
           0.0.9 - limit results to stop browser race
+          1.0.0 - Paged queue results (for when your queue is massive) + background scheduling on 7.6
         </releaseNotes>
         <dependencies>
             <group targetFramework=".NETFramework4.5.2">
-                <dependency id="Our.Umbraco.PublishQueue.Core" version="0.0.9-beta" />
+                <dependency id="Our.Umbraco.PublishQueue.Core" version="1.0.0.760" />
                 <dependency id="Microsoft.AspNet.SignalR.JS" version="2.2.1" />
             </group>
         </dependencies>

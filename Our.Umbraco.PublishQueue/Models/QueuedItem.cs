@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.DatabaseAnnotations;
 
@@ -50,6 +52,7 @@ namespace Our.Umbraco.PublishQueue.Models
         public string data { get; set; }
     }
 
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum QueueActions
     {
         None = 0,

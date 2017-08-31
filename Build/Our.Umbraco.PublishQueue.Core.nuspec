@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
     <metadata>
         <id>Our.Umbraco.PublishQueue.Core</id>
-        <version>0.0.9-Beta</version>
+        <version>1.0.0.760</version>
         <title>Umbraco Publication Queue Core</title>
         <authors>Kevin Jump,Darren Ferguson</authors>
         <owners>Kevin Jump</owners>
@@ -19,6 +19,7 @@
           0.0.6 - make the data column bigger
           0.0.8 - Index fix
           0.0.9 - limit results to stop browser race
+          1.0.0 - Paged queue results, and inbuilt scheduling
         </releaseNotes>
         <dependencies>
             <group targetFramework=".NETFramework4.5.2">

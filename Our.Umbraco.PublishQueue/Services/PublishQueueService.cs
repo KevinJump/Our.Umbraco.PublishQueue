@@ -81,6 +81,11 @@ namespace Our.Umbraco.PublishQueue.Services
             return _queueRepo.List(limit);
         }
 
+        public QueuePagedResult GetPaged(int page, int pageSize)
+        {
+            return _queueRepo.GetPaged(page, pageSize);
+        }
+
         public void Clear()
         {
             _queueRepo.Clear();

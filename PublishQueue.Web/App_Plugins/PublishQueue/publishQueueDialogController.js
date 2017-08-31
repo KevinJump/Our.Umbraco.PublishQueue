@@ -1,51 +1,57 @@
-﻿angular.module('umbraco').controller('publishQueueDialogController',
-    function ($scope, $routeParams, editorState, $http, $q, $location, publishQueueDashboardService, publishQueueHub) {
-        $scope.loading = true;
-        $scope.processing = false; 
-        $scope.processed = false;
-        $scope.count = 0;
+﻿(function () {
 
-        $scope.publishAll = true;
-        $scope.includeUnpublished = false;
+    'use strict';
 
-        var dialogOptions = $scope.dialogOptions;
-        var node = dialogOptions.currentNode;
+    function dialogController($scope, publishQueueService, publishQueueHub) {
 
-        $scope.send = function () {
+        var vm = this;
 
-            $scope.processing = true;
+        vm.processing = false;
+        vm.processed = false;
+        vm.count = 0;
 
-            $http({
-                method: 'GET',
-                url: '/umbraco/backoffice/queue/PublishQueueApi/EnqueueTree?id=' + node.id + "&all=" + $scope.publishAll + "&unpub=" + $scope.includeUnpublished
-            })
-                .success(function (data, status, headers, config) {
-                    $scope.count = data.data;
-                    $scope.loading = false;
-                    $scope.processing = false;
-                    $scope.processed = true;
-                    $scope.getStatus();
-                })
-                .error(function (data, status, headers, config) {
-                    $scope.loading = false;
-                    $scope.processing = false;
-                    $scope.processed = true;
+        vm.publishAll = true;
+        vm.includeUnpublished = false; 
+
+        vm.node = $scope.dialogOptions.currentNode;
+
+        vm.send = send;
+
+        //////// signalR queue hub.
+
+        vm.queueHub = publishQueueHub.Connect('PublishQueueHub');
+        vm.queueHub.on('Add', function (data) {
+            vm.update = data;
+        });
+
+        vm.queueHub.start();
+
+        ///////////////////
+
+        function send() {
+            vm.processing = true;
+
+            publishQueueService.enqueue(vm.node.id, vm.publishAll, vm.includeUnpublished)
+                .then(function (result) {
+                    vm.count = result.data;
+                    getStatus();
+                    vm.processing = false;
+                    vm.processed = true;
+                }, function (error) {
+                    vm.processing = false; 
                 });
         }
 
-        var queueHub = publishQueueHub.Connect('PublishQueueHub');
-
-        queueHub.on('add', function (data) {
-            $scope.update = data;
-        });
-
-        $scope.getStatus = function () {
-            publishQueueDashboardService.getStatus()
-                .then(function (response) {
-                    $scope.status = response.data;
+        function getStatus() {
+            publishQueueService.getStatus()
+                .then(function (result) {
+                    vm.status = result.data;
                 });
-        };
+        }
 
-        queueHub.start();
     }
-);
+
+    angular.module('umbraco')
+        .controller('publishQueueDialogController', dialogController);
+
+})();

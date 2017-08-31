@@ -1,25 +1,50 @@
-﻿angular.module('umbraco.resources').factory('publishQueueDashboardService',
-    function ($q, $http) {
+﻿(function () {
+
+    function queueService($http) {
 
         var serviceRoot = 'backoffice/queue/PublishQueueApi/';
 
-        return {
+        var service = {
+            getItems: getItems,
+            getStatus: getStatus,
+            process: process,
+            clear: clear,
 
-            getItems: function () {
-                return $http.get(serviceRoot + "GetItems");
-            }, 
+            enqueue: enqueue
 
-            getStatus : function () {
-                return $http.get(serviceRoot + "GetStatus");
-            },
+        };
 
-            process: function () {
-                return $http.get(serviceRoot + "ProcessQueue?throttle=250");
-            },
-            
-            clear: function () {
-                return $http.get(serviceRoot + "ClearQueue")
-            }
+        return service; 
+
+        ///////////////
+
+        function getItems(page) {
+            return $http.get(serviceRoot + "GetItems?page=" + page);
+        }
+
+        function getStatus() {
+            return $http.get(serviceRoot + "GetStatus");
+        }
+
+        function process() {
+            return $http.get(serviceRoot + "ProcessQueue?throttle=250");
+        }
+
+        function clear() {
+            return $http.post(serviceRoot + "ClearQueue");
+        }
+
+        function enqueue(nodeId, includeChildren, includeUnpublished) {
+            var options = {
+                IncludeChildren: includeChildren,
+                IncludeUnpublished: includeUnpublished
+            };
+
+            return $http.post(serviceRoot + "EnqueueTree/" + nodeId, options);
         }
     }
-);
+
+    angular.module('umbraco.resources')
+        .factory('publishQueueService', queueService);
+
+})();

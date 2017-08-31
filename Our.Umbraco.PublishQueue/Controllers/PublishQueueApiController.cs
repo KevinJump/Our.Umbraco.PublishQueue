@@ -17,12 +17,27 @@ namespace Our.Umbraco.PublishQueue.Controllers
     [PluginController("Queue")]
     public class PublishQueueApiController : UmbracoAuthorizedJsonController
     {
+        /// <summary>
+        ///  get the end point - we call this in ApplicationStarted, when we
+        ///  are putting the url of our controller into the umbraco
+        ///  sys veriables collection, then we can unhardwire the urls 
+        ///  in our angular services 
+        /// </summary>
         [HttpGet]
-        public IEnumerable<QueuedItem> GetItems()
+        public bool GetApiEndpoint()
+        {
+            return true;
+        }
+
+        [HttpGet]
+        public QueuePagedResult GetItems(int page)
         {
             // only return the top 100. because it gets messy with more than that. 
-            return PublishQueueContext.Current.QueueService.List(100);
+            // return PublishQueueContext.Current.QueueService.List(100);
+
+            return PublishQueueContext.Current.QueueService.GetPaged(page, 25);
         }
+
 
         [HttpGet]
         public QueueStatus GetStatus()
@@ -36,7 +51,7 @@ namespace Our.Umbraco.PublishQueue.Controllers
             return PublishQueueContext.Current.QueueService.Process(throttle);
         }
 
-        [HttpGet]
+        [HttpPost]
         public int ClearQueue()
         {
             var size = PublishQueueContext.Current.QueueService.Count();
@@ -44,8 +59,8 @@ namespace Our.Umbraco.PublishQueue.Controllers
             return size;
         }
 
-        [HttpGet]
-        public int EnqueueTree(int id, bool all = true, bool unpub = false)
+        [HttpPost]
+        public int EnqueueTree(int id, EnqueueOptions options)
         {
             var hubContext = GlobalHost.ConnectionManager.GetHubContext<PublishQueueHub>();
 
@@ -53,16 +68,15 @@ namespace Our.Umbraco.PublishQueue.Controllers
             var node = contentService.GetById(id);
             var count = 0;
 
-            if (unpub || node.Published)
+            if (options.IncludeUnpublished || node.Published)
             {
                 contentService.QueueForPublish(node);
                 count++;
             }
 
-
             var children = contentService.GetDescendants(id).ToList();
 
-            if (all)
+            if (options.IncludeChildren)
             {
                 foreach (var child in children)
                 {
@@ -74,7 +88,7 @@ namespace Our.Umbraco.PublishQueue.Controllers
                         LastAction = "Added: " + child.Name
                     });
 
-                    if (unpub || child.Published)
+                    if (options.IncludeUnpublished || child.Published)
                     {
                         contentService.QueueForPublish(child);
                         count++;
@@ -83,6 +97,12 @@ namespace Our.Umbraco.PublishQueue.Controllers
             }
 
             return count;
+        }
+
+        public class EnqueueOptions
+        {
+            public bool IncludeChildren { get; set; }
+            public bool IncludeUnpublished { get; set; }
         }
     }
       

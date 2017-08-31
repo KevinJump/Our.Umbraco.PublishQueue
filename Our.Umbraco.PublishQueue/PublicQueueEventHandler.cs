@@ -11,8 +11,14 @@ using Umbraco.Core.Configuration;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Persistence.Migrations;
 using Umbraco.Web;
+
+using Umbraco.Web.Scheduling;
+
 using Umbraco.Web.Models.Trees;
 using Umbraco.Web.Trees;
+using Our.Umbraco.PublishQueue.Controllers;
+using System.Web;
+using System.Web.Mvc;
 
 namespace Our.Umbraco.PublishQueue
 {
@@ -44,6 +50,34 @@ namespace Our.Umbraco.PublishQueue
                 );
 
             ContentTreeController.MenuRendering += ContentTreeController_MenuRendering;
+
+            global::Umbraco.Web.UI.JavaScript.ServerVariablesParser.Parsing += ServerVariablesParser_Parsing;
+
+            if (UmbracoVersion.Current.Major == 7 && UmbracoVersion.Current.Minor > 6)
+            {
+                // we can't setup a scheduled job here. because we need 7.6+ to do this in the background
+                applicationContext.ProfilingLogger.Logger.Info<PublishQueue>("Scheduled job needs to be setup in umbracoSettings.Config prior to umbraco 7.6+");
+            }
+            else
+            {
+                SetupScheduledTask(applicationContext.ProfilingLogger.Logger);
+            }
+        }
+
+        private void ServerVariablesParser_Parsing(object sender, Dictionary<string, object> e)
+        {
+            // adds a sys variable  we can get in javascript 
+            if (HttpContext.Current != null)
+            {
+                var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
+
+                e.Add("publishQueue", new Dictionary<string, object>
+                {
+                    { "QueueService", urlHelper.GetUmbracoApiServiceBaseUrl<PublishQueueApiController>(
+                        controller => controller.GetApiEndpoint() ) }
+                });
+            }
+
         }
 
         private void ContentTreeController_MenuRendering(TreeControllerBase sender, MenuRenderingEventArgs e)
@@ -90,6 +124,33 @@ namespace Our.Umbraco.PublishQueue
                 applicationContext.ProfilingLogger
                     .Logger.Error<PublicQueueEventHandler>("Error running migration", ex);
             }
+        }
+
+        private BackgroundTaskRunner<IBackgroundTask> _taskRunner;
+
+        private void SetupScheduledTask(ILogger logger)
+        {
+#if !TARGETSEVENFIVE
+            if (!PublishQueueContext.Current.ScheduleDisabled)
+            {
+                var period = PublishQueueContext.Current.SchedulePeriod;
+
+                logger.Info<PublishQueue>("Setting up background Processing task to run every {0} seconds", () => period);
+                logger.Info<PublishQueue>("To disable background processing set [publishQueue.disableScheduledQueue] to false in appSettings section of web.config");
+                logger.Info<PublishQueue>("to change the period use [publishQueue.checkPeriod] setting in appSettings");
+
+                _taskRunner = new BackgroundTaskRunner<IBackgroundTask>("Queue Job", logger);
+                if (_taskRunner != null)
+                {
+                    var queueCheck = new QueueCheckRecurringTask(
+                        _taskRunner,
+                        period * 1000,
+                        period * 1000);
+
+                    _taskRunner.Add(queueCheck);
+                }
+            }
+#endif
         }
     }
 }
