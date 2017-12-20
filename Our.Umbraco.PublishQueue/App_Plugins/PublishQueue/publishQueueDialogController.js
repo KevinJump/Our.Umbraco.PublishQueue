@@ -19,12 +19,17 @@
 
         //////// signalR queue hub.
 
-        vm.queueHub = publishQueueHub.Connect('PublishQueueHub');
-        vm.queueHub.on('Add', function (data) {
-            vm.update = data;
-        });
+        vm.queueHub = publishQueueHub.initHub(function (hub) {
 
-        vm.queueHub.start();
+            vm.queueHub = hub;
+
+            vm.queueHub.on('Add', function (data) {
+                vm.update = data;
+            });
+
+            vm.queueHub.start();
+
+        });
 
         ///////////////////
 

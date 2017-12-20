@@ -1,11 +1,11 @@
 ﻿{
-	javascript: [
-		"~/Scripts/jquery.signalR-2.2.1.js",
-		'~/App_Plugins/PublishQueue/publishQueueController.js',
-		'~/App_Plugins/PublishQueue/publishQueueDialogController.js',
-		'~/App_Plugins/PublishQueue/publishQueueService.js',
-		'~/App_Plugins/PublishQueue/publishQueueSignalRHub.js'
-	],
+  javascript: [
+
+    "~/App_Plugins/PublishQueue/publishQueueController.js",
+    "~/App_Plugins/PublishQueue/publishQueueDialogController.js",
+    "~/App_Plugins/PublishQueue/publishQueueService.js",
+    "~/App_Plugins/PublishQueue/publishQueueSignalRHub.js"
+  ],
 	css: [
 		'~/App_Plugins/PublishQueue/publishQueue.css'
 	]

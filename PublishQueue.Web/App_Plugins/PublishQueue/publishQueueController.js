@@ -96,16 +96,22 @@
         }
 
         ///// signal r
-        vm.queueHub = publishQueueHub.Connect('PublishQueueHub');
-        vm.queueHub.on('progress', function (data) {
-            vm.status = data;
-            // more than 100, and we have a page, anyway.?
-            if (Math.abs(vm.updateCount - vm.status.Count) > 10) {
-                vm.getQueueItems(vm.page);
-            }
-        })
+        vm.queueHub = publishQueueHub.initHub(function (hub) {
 
-        vm.queueHub.start();
+            vm.queueHub = hub;
+
+            vm.queueHub.on('progress', function (data) {
+                vm.status = data;
+                // more than 100, and we have a page, anyway.?
+                if (Math.abs(vm.updateCount - vm.status.Count) > 10) {
+                    vm.getQueueItems(vm.page);
+                }
+            })
+
+            vm.queueHub.start();
+
+        });
+
         vm.loadQueue();
 
         /////////////

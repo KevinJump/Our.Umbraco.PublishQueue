@@ -242,6 +242,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Plugins\PublishQueue\libs\jquery.signalR-2.2.1.js" />
     <Content Include="App_Plugins\PublishQueue\publishqueue.css" />
     <Content Include="App_Plugins\PublishQueue\publishQueueController.js" />
     <Content Include="App_Plugins\PublishQueue\PublishQueueDashboard.html" />
