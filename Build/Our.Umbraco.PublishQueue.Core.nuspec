@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
     <metadata>
         <id>Our.Umbraco.PublishQueue.Core</id>
-        <version>1.0.0.760</version>
+        <version>1.1.0</version>
         <title>Umbraco Publication Queue Core</title>
         <authors>Kevin Jump,Darren Ferguson</authors>
         <owners>Kevin Jump</owners>
@@ -20,11 +20,10 @@
           0.0.8 - Index fix
           0.0.9 - limit results to stop browser race
           1.0.0 - Paged queue results, and inbuilt scheduling
+          1.1.0 - SignalR Dependency changes
         </releaseNotes>
         <dependencies>
-            <group targetFramework=".NETFramework4.5.2">
-                <dependency id="Microsoft.AspNet.SignalR.Core" version="2.2.1" />
-            </group>
+            <dependency id="Microsoft.AspNet.SignalR.Core" version="2.2.1" />
         </dependencies>
     </metadata>
   <files>

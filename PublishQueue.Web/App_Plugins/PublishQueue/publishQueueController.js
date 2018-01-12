@@ -96,7 +96,7 @@
         }
 
         ///// signal r
-        vm.queueHub = publishQueueHub.initHub(function (hub) {
+        publishQueueHub.initHub(function (hub) {
 
             vm.queueHub = hub;
 
