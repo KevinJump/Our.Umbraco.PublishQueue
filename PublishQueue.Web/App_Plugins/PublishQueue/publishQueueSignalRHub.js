@@ -1,5 +1,5 @@
 ﻿angular.module('umbraco.resources').factory('publishQueueHub',
-    function ($rootScope, assetsService) {
+    function ($rootScope, $q, assetsService) {
 
         var scripts = [
             "/App_Plugins/PublishQueue/libs/jquery.signalR-2.2.1.js",
@@ -14,10 +14,20 @@
         //////////////
 
         function initHub(callback) {
-
             if ($.connection == undefined) {
 
-                assetsService.load(scripts)
+                // we have to load this way, because the 
+                // asset service won't reconise the 
+                // umbraco call, as it has not extension
+                // so we do them our selves and then 
+                // wait for them all to resolve. 
+
+                var promises = [];
+                scripts.forEach(function (script) {
+                    promises.push(assetsService.loadJs(script));
+                });
+
+                $q.all(promises)
                     .then(function () {
                         console.log('scripts loaded');
                         hubSetup(callback);

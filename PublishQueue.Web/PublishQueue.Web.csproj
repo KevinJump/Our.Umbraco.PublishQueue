@@ -254,7 +254,6 @@
     <Content Include="App_Plugins\ModelsBuilder\modelsbuilder.controller.js" />
     <Content Include="App_Plugins\ModelsBuilder\modelsbuilder.htm" />
     <Content Include="App_Plugins\ModelsBuilder\modelsbuilder.resource.js" />
-    <Content Include="App_Plugins\PublishQueue\jquery.signalR-2.2.1.js" />
     <Content Include="App_Plugins\PublishQueue\publishQueueDialogController.js" />
     <Content Include="App_Plugins\PublishQueue\publishQueueSignalRHub.js" />
     <Content Include="App_Plugins\PublishQueue\sendtoqueue.html" />

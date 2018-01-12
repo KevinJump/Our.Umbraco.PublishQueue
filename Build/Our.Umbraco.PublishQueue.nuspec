@@ -19,7 +19,7 @@
           0.0.6 - make the data column bigger
           0.0.9 - limit results to stop browser race
           1.0.0 - Paged queue results (for when your queue is massive) + background scheduling on 7.6
-          1.0.1 - Removed SignalR.JS Dependency, and cleaned up Signal R Initialization
+          1.1.0 - Removed SignalR.JS Dependency, and cleaned up Signal R Initialization
         </releaseNotes>
         <dependencies>
             <dependency id="Our.Umbraco.PublishQueue.Core" version="1.1.0" />
