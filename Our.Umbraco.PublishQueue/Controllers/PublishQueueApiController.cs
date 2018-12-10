@@ -67,14 +67,11 @@ namespace Our.Umbraco.PublishQueue.Controllers
             var contentService = Services.ContentService;
             var node = contentService.GetById(id);
             var count = 0;
+            //always queue the first item chosen
+            contentService.QueueForPublish(node);
+            count++;
 
-            if (options.IncludeUnpublished || node.Published)
-            {
-                contentService.QueueForPublish(node);
-                count++;
-            }
-
-            var children = contentService.GetDescendants(id).ToList();
+            var children = contentService.GetDescendants(id).OrderBy(f => f.Level).ToList();
 
             if (options.IncludeChildren)
             {
@@ -105,5 +102,5 @@ namespace Our.Umbraco.PublishQueue.Controllers
             public bool IncludeUnpublished { get; set; }
         }
     }
-      
+
 }
