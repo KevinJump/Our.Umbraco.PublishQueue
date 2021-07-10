@@ -82,20 +82,36 @@ namespace Our.Umbraco.PublishQueue
 
         private void ContentTreeController_MenuRendering(TreeControllerBase sender, MenuRenderingEventArgs e)
         {
+
             if (sender.TreeAlias == "content")
             {
-                var publishItem = new MenuItem("queue", "Send to Publication Queue");
-                publishItem.Icon = "indent";
-                publishItem.SeperatorBefore = true;
-                publishItem.AdditionalData.Add("actionView",
-                    "/App_Plugins/PublishQueue/sendtoqueue.html?id={id}");
+                bool showMenuItem = false;
+                //check if current user is an admin - different in 7.7+
+                sender.Security.CurrentUser.UserType.Alias.InvariantEquals("admin");
+                //sender.Security.CurrentUser.Groups.Any(x => x.Alias.InvariantEquals("admin"));
+                if (!showMenuItem && int.TryParse(e.NodeId, out int nodeId))
+                {
+                    var permissions = sender.Services.UserService.GetPermissions(sender.Security.CurrentUser, nodeId);
+                    if (permissions.Any(x => x.AssignedPermissions.InvariantContains("U")))
+                    {
+                        showMenuItem = true;
+                    }
+                }
+                if (showMenuItem)
+                {
+                    var publishItem = new MenuItem("queue", "Send to Publication Queue");
+                    publishItem.Icon = "indent";
+                    publishItem.SeperatorBefore = true;
+                    publishItem.AdditionalData.Add("actionView",
+                        "/App_Plugins/PublishQueue/sendtoqueue.html?id={id}");
 
-                e.Menu.Items.Insert(e.Menu.Items.Count - 1, publishItem);
+                    e.Menu.Items.Insert(e.Menu.Items.Count - 1, publishItem);
+                }
 
             }
         }
 
-        private void ApplyMigrations(ApplicationContext applicationContext, 
+        private void ApplyMigrations(ApplicationContext applicationContext,
             string productName, SemVersion targetVersion)
         {
             var currentVersion = new SemVersion(0);
@@ -119,7 +135,7 @@ namespace Our.Umbraco.PublishQueue
             {
                 migrationRunner.Execute(applicationContext.DatabaseContext.Database);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 applicationContext.ProfilingLogger
                     .Logger.Error<PublicQueueEventHandler>("Error running migration", ex);
